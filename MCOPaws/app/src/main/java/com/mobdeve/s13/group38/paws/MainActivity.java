@@ -1,96 +1,82 @@
 package com.mobdeve.s13.group38.paws;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import java.util.Calendar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
-    boolean female = false;
+
+    private TextView tvRegister;
+    private EditText etEmail;
+    private EditText etPassword;
+    private Button btnLogin;
+    private ProgressBar pbLogin;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-//
-//        EditText mDisplayDate = (EditText) findViewById(R.id.et_birthday_register);
-//        EditText mDisplayGender = (EditText) findViewById(R.id.et_gender_register);
-//
-//        mDisplayDate.setOnClickListener(view -> {
-//            Calendar cal = Calendar.getInstance();
-//            int year = cal.get(Calendar.YEAR);
-//            int month = cal.get(Calendar.MONTH);
-//            int day = cal.get(Calendar.DAY_OF_MONTH);
-//
-//            DatePickerDialog dialog = new DatePickerDialog(
-//                    MainActivity.this,
-//                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-//                    mDateSetListener,
-//                    year,month,day);
-//            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//            dialog.show();
-//        });
-//
-//        mDisplayDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                Calendar cal = Calendar.getInstance();
-//                int year = cal.get(Calendar.YEAR);
-//                int month = cal.get(Calendar.MONTH);
-//                int day = cal.get(Calendar.DAY_OF_MONTH);
-//
-//                DatePickerDialog dialog = new DatePickerDialog(
-//                        MainActivity.this,
-//                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-//                        mDateSetListener,
-//                        year,month,day);
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                dialog.show();
-//            }
-//        });
-//
-//        mDateSetListener = (view, year, month, dayOfMonth) -> {
-//            month = month + 1;
-//            Log.d("Main", "onDateSet: mm/dd/yyy: " + month + "/" + dayOfMonth + "/" + year);
-//
-//            String date = month + "/" + dayOfMonth + "/" + year;
-//            mDisplayDate.setText(date);
-//        };
-//
-//        mDisplayGender.setOnClickListener(view -> {
-//            if (female){
-//                mDisplayGender.setText("Male");
-//                female = false;
-//            }
-//            else{
-//                mDisplayGender.setText("Female");
-//                female = true;
-//            }
-//        });
-//
-//        mDisplayGender.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (female){
-//                    mDisplayGender.setText("Male");
-//                    female = false;
-//                }
-//                else{
-//                    mDisplayGender.setText("Female");
-//                    female = true;
-//                }
-//            }
-//        });
-//
+        setContentView(R.layout.activity_login);
+        this.initFirebase();
+        this.initComponents();
+    }
+
+    private void initFirebase(){
+        this.mAuth = FirebaseAuth.getInstance();
+    }
+
+    private void initComponents(){
+        this.tvRegister = findViewById(R.id.tv_register_login);
+        this.etEmail = findViewById(R.id.et_email_login);
+        this.etPassword = findViewById(R.id.et_password_login);
+        this.btnLogin = findViewById(R.id.btn_login);
+        this.pbLogin = findViewById(R.id.pb_login);
+
+        this.tvRegister.setOnClickListener(view->{
+            Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(i);
+            finish();
+        });
+
+        this.btnLogin.setOnClickListener(view->{
+            String email = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+            signIn(email,password);
+        });
+    }
+
+    private void signIn(String email, String password){
+        this.pbLogin.setVisibility(View.VISIBLE);
+
+        this.mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else{
+                            MainActivity.this.pbLogin.setVisibility(View.GONE);
+                            Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 }
