@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         this.tvRegister.setOnClickListener(view->{
             Intent i = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(i);
-            finish();
         });
 
         this.btnLogin.setOnClickListener(view->{
@@ -63,20 +62,25 @@ public class MainActivity extends AppCompatActivity {
     private void signIn(String email, String password){
         this.pbLogin.setVisibility(View.VISIBLE);
 
-        this.mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                            startActivity(intent);
-                            finish();
+        if(!email.isEmpty() && !password.isEmpty()) {
+            this.mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                MainActivity.this.pbLogin.setVisibility(View.GONE);
+                                Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+                            }
                         }
-                        else{
-                            MainActivity.this.pbLogin.setVisibility(View.GONE);
-                            Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                    });
+        }
+        else{
+            MainActivity.this.pbLogin.setVisibility(View.GONE);
+            Toast.makeText(MainActivity.this, "Invalid Input", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -20,6 +20,7 @@
         android:layout_height="200dp"
         android:layout_marginBottom="-20sp"
         android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/design_2" />
@@ -43,19 +44,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="Max"
+        android:text="Name"
         android:textColor="#131313"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/gl_middle_profile"
-        app:layout_constraintTop_toTopOf="@+id/cardView2" />
+        app:layout_constraintTop_toTopOf="@+id/cv_photo" />
 
     <TextView
         android:id="@+id/tv_age_gender_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="3 years, Female"
+        android:text="0 years, Female"
         android:textColor="#131313"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/tv_name_profile"
@@ -66,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:text="Shih Tzu"
+        android:text="Brred"
         android:textColor="#131313"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/tv_age_gender_profile"
@@ -77,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:text='"woof woof woof"'
+        android:text="Description"
         android:textColor="#131313"
         android:textSize="15sp"
         android:textStyle="italic"
@@ -98,18 +99,57 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="151dp" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="20sp"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/ib_edit"
+        android:layout_width="20dp"
+        android:layout_height="36dp"
         android:layout_marginStart="5dp"
+        android:background="#00FFFFFF"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/tv_name_profile"
         app:layout_constraintStart_toEndOf="@+id/tv_name_profile"
         app:layout_constraintTop_toTopOf="@+id/tv_name_profile"
         app:srcCompat="@drawable/baseline_mode_edit_black_24dp" />
 
+    <LinearLayout
+        android:id="@+id/ll_toolbar_profile"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:translationZ="90dp"
+        android:weightSum="0.99"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_home_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="#00FFFFFF"
+            app:srcCompat="@drawable/outline_home_black_36dp" />
+
+        <ImageButton
+            android:id="@+id/btn_add_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="#00FFFFFF"
+            app:srcCompat="@drawable/outline_add_a_photo_black_36dp" />
+
+        <ImageButton
+            android:id="@+id/btn_profile_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="#00FFFFFF"
+            app:srcCompat="@drawable/outline_pets_black_36dp" />
+    </LinearLayout>
+
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cv_feed"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -128,12 +168,12 @@
             android:layout_marginStart="20sp"
             android:layout_marginTop="30sp"
             android:layout_marginEnd="20sp"
-            android:layout_marginBottom="50sp" />
+            android:layout_marginBottom="85sp" />
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/cv_photo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
@@ -150,5 +190,18 @@
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/teacup_shih_tzu" />
     </androidx.cardview.widget.CardView>
+
+    <ImageButton
+        android:id="@+id/ib_logout"
+        android:layout_marginStart="5dp"
+        android:background="#00FFFFFF"
+        android:scaleType="fitCenter"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_logout_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

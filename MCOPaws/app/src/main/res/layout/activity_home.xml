@@ -8,7 +8,7 @@
     tools:context=".HomeActivity">
 
     <LinearLayout
-        android:id="@+id/ll_toolbar"
+        android:id="@+id/ll_toolbar_search"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:orientation="horizontal"
@@ -26,7 +26,7 @@
             app:srcCompat="@drawable/outline_home_black_36dp" />
 
         <ImageButton
-            android:id="@+id/btn_home_add"
+            android:id="@+id/btn_add_home"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
@@ -34,7 +34,7 @@
             app:srcCompat="@drawable/outline_add_a_photo_black_36dp" />
 
         <ImageButton
-            android:id="@+id/btn_home_profile"
+            android:id="@+id/btn_profile_home"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
@@ -68,7 +68,7 @@
         android:layout_width="409dp"
         android:layout_height="612dp"
         android:layout_marginBottom="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/ll_toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/ll_toolbar_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_home_logo" />

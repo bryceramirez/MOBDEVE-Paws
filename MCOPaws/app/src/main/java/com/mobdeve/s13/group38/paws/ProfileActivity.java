@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +38,12 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseUser user;
     private String userId;
 
+    private ImageButton ibHome;
+    private ImageButton ibAdd;
+    private ImageButton ibProfile;
+    private ImageButton ibLogout;
+    private ImageButton ibEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +57,39 @@ public class ProfileActivity extends AppCompatActivity {
         this.tvAgeGender = findViewById(R.id.tv_age_gender_profile);
         this.tvBreed = findViewById(R.id.tv_breed_profile);
         this.tvDescription = findViewById(R.id.tv_description_profile);
+
+        this.ibHome = findViewById(R.id.btn_home_profile);
+        this.ibAdd = findViewById(R.id.btn_add_profile);
+        this.ibProfile = findViewById(R.id.btn_profile_profile);
+        this.ibLogout = findViewById(R.id.ib_logout);
+        this.ibEdit = findViewById(R.id.ib_edit);
+
+        this.ibHome.setOnClickListener(view->{
+            Intent i = new Intent(ProfileActivity.this, HomeActivity.class);
+            startActivity(i);
+        });
+
+        this.ibAdd.setOnClickListener(view->{
+            Intent i = new Intent(ProfileActivity.this, PostDetailsActivity.class);
+            startActivity(i);
+        });
+
+        this.ibProfile.setOnClickListener(view->{
+            Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
+            startActivity(i);
+        });
+
+        this.ibEdit.setOnClickListener(view->{
+            Intent i = new Intent(ProfileActivity.this, EditActivity.class);
+            startActivity(i);
+        });
+
+        this.ibLogout.setOnClickListener(view->{
+            this.mAuth.signOut();
+            Intent i = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
+        });
     }
 
     private void initFirebase(){
