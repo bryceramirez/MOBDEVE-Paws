@@ -68,7 +68,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_caption_details"
-            tools:srcCompat="@drawable/teacup_shih_tzu" />
+            android:src="@drawable/teacup_shih_tzu" />
 
         <Button
             android:id="@+id/btn_post_details"
