@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -21,7 +23,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
-public class PostDetailsEditedActivity extends AppCompatActivity {
+import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
+import ja.burhanrashid52.photoeditor.ViewType;
+
+public class PostDetailsEditedActivity extends AppCompatActivity{
     private ImageButton ibHome;
     private ImageButton ibAdd;
     private ImageButton ibProfile;
@@ -103,4 +108,5 @@ public class PostDetailsEditedActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
