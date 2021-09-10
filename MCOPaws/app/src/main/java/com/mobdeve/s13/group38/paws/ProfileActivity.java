@@ -70,7 +70,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         this.ibAdd.setOnClickListener(view->{
-            Intent i = new Intent(ProfileActivity.this, PostDetailsActivity.class);
+//            HERE
+            Intent i = new Intent(ProfileActivity.this, EditImageActivity.class);
             startActivity(i);
         });
 
