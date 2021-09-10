@@ -29,7 +29,7 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         this.ibAdd.setOnClickListener(view->{
-            Intent i = new Intent(SearchActivity.this, PostDetailsActivity.class);
+            Intent i = new Intent(SearchActivity.this, EditImageActivity.class);
             startActivity(i);
         });
 

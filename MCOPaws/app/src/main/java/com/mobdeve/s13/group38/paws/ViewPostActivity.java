@@ -30,7 +30,7 @@ public class ViewPostActivity extends AppCompatActivity {
         });
 
         this.ibAdd.setOnClickListener(view->{
-            Intent i = new Intent(ViewPostActivity.this, PostDetailsActivity.class);
+            Intent i = new Intent(ViewPostActivity.this, EditImageActivity.class);
             startActivity(i);
         });
 

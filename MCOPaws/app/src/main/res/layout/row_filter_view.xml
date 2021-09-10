@@ -7,7 +7,7 @@
     android:layout_margin="2dp">
 
     <ImageView
-        android:id="@+id/imgFilterView"
+        android:id="@+id/iv_filter_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -19,7 +19,7 @@
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <TextView
-        android:id="@+id/txtFilterName"
+        android:id="@+id/tv_filter_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#90000000"
@@ -27,9 +27,9 @@
         android:padding="4dp"
         android:textColor="@android:color/white"
         android:textSize="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgFilterView"
-        app:layout_constraintEnd_toEndOf="@+id/imgFilterView"
-        app:layout_constraintStart_toStartOf="@+id/imgFilterView"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_filter_view"
+        app:layout_constraintEnd_toEndOf="@+id/iv_filter_view"
+        app:layout_constraintStart_toStartOf="@+id/iv_filter_view"
         tools:text="@tools:sample/full_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

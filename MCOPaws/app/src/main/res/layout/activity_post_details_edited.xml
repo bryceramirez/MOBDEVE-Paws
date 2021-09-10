@@ -73,7 +73,7 @@
             android:src="@drawable/teacup_shih_tzu" />
 
         <Button
-            android:id="@+id/btn_post_details"
+            android:id="@+id/btn_post_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

@@ -12,8 +12,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,7 +72,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     private ShapeBuilder mShapeBuilder;
     private EmojiBSFragment mEmojiBSFragment;
     private StickerBSFragment mStickerBSFragment;
-    private TextView mTxtCurrentTool;
+
     private Typeface mWonderFont;
     private RecyclerView mRvTools, mRvFilters;
     private final EditingToolsAdapter mEditingToolsAdapter = new EditingToolsAdapter(this);
@@ -84,13 +84,13 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     @Nullable
     @VisibleForTesting
     Uri mSaveImageUri;
-
+    private Uri imageUri;
     private FileSaveHelper mSaveFileHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        makeFullScreen();
+        //makeFullScreen();
         setContentView(R.layout.activity_edit_image);
 
         initViews();
@@ -130,11 +130,17 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
         mPhotoEditor.setOnPhotoEditorListener(this);
 
-        //Set Image Dynamically
-        mPhotoEditorView.getSource().setImageResource(R.drawable.paris_tower);
+        mPhotoEditorView.getSource().setImageResource(R.drawable.blank_image);
+        mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
 
         mSaveFileHelper = new FileSaveHelper(this);
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_REQUEST);
     }
+
 
     private void handleIntentImage(ImageView source) {
         Intent intent = getIntent();
@@ -147,6 +153,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                     Uri uri = intent.getData();
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                     source.setImageBitmap(bitmap);
+                    mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -156,6 +163,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                     Uri imageUri = intent.getData();
                     if (imageUri != null) {
                         source.setImageURI(imageUri);
+                        mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
                     }
                 }
             }
@@ -169,34 +177,34 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         ImageView imgGallery;
         ImageView imgSave;
         ImageView imgClose;
-        ImageView imgShare;
+        Button btnDone;
 
         mPhotoEditorView = findViewById(R.id.photoEditorView);
-        mTxtCurrentTool = findViewById(R.id.txtCurrentTool);
-        mRvTools = findViewById(R.id.rvConstraintTools);
-        mRvFilters = findViewById(R.id.rvFilterView);
+
+        mRvTools = findViewById(R.id.rv_constraint_tools_edit);
+        mRvFilters = findViewById(R.id.rv_filter_view_edit);
         mRootView = findViewById(R.id.rootView);
 
-        imgUndo = findViewById(R.id.imgUndo);
+        imgUndo = findViewById(R.id.iv_undo_edit);
         imgUndo.setOnClickListener(this);
 
-        imgRedo = findViewById(R.id.imgRedo);
+        imgRedo = findViewById(R.id.iv_redo_edit);
         imgRedo.setOnClickListener(this);
 
-        imgCamera = findViewById(R.id.imgCamera);
+        imgCamera = findViewById(R.id.iv_camera_edit);
         imgCamera.setOnClickListener(this);
 
-        imgGallery = findViewById(R.id.imgGallery);
+        imgGallery = findViewById(R.id.iv_upload_edit);
         imgGallery.setOnClickListener(this);
 
-        imgSave = findViewById(R.id.imgSave);
+        imgSave = findViewById(R.id.iv_save_edit);
         imgSave.setOnClickListener(this);
 
-        imgClose = findViewById(R.id.imgClose);
+        imgClose = findViewById(R.id.iv_close_edit);
         imgClose.setOnClickListener(this);
 
-        imgShare = findViewById(R.id.imgShare);
-        imgShare.setOnClickListener(this);
+        btnDone = findViewById(R.id.btn_post_details);
+        btnDone.setOnClickListener(this);
 
     }
 
@@ -209,7 +217,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
             styleBuilder.withTextColor(newColorCode);
 
             mPhotoEditor.editText(rootView, inputText, styleBuilder);
-            mTxtCurrentTool.setText(R.string.label_text);
+
         });
     }
 
@@ -243,49 +251,45 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     public void onClick(View view) {
         switch (view.getId()) {
 
-            case R.id.imgUndo:
+            case R.id.iv_undo_edit:
                 mPhotoEditor.undo();
                 break;
 
-            case R.id.imgRedo:
+            case R.id.iv_redo_edit:
                 mPhotoEditor.redo();
                 break;
 
-            case R.id.imgSave:
+            case R.id.iv_save_edit:
                 saveImage();
                 break;
 
-            case R.id.imgClose:
+            case R.id.iv_close_edit:
                 onBackPressed();
                 break;
-            case R.id.imgShare:
-                shareImage();
-                break;
 
-            case R.id.imgCamera:
+            case R.id.iv_camera_edit:
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 break;
 
-            case R.id.imgGallery:
+            case R.id.iv_upload_edit:
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_REQUEST);
                 break;
-        }
-    }
 
-    private void shareImage() {
-        if (mSaveImageUri == null) {
-            showSnackbar(getString(R.string.msg_save_image_to_share));
-            return;
-        }
+            case R.id.btn_post_details:
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_STREAM, buildFileProviderUri(mSaveImageUri));
-        startActivity(Intent.createChooser(intent, getString(R.string.msg_share_image)));
+
+                setImage();
+//
+//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                mPhotoEditorView.getSource().getDrawable().compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//                String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+//                return Uri.parse(path);
+                break;
+        }
     }
 
     private Uri buildFileProviderUri(@NonNull Uri uri) {
@@ -316,6 +320,52 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                             showSnackbar("Image Saved Successfully");
                             mSaveImageUri = uri;
                             mPhotoEditorView.getSource().setImageURI(mSaveImageUri);
+                            mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            hideLoading();
+                            showSnackbar("Failed to save Image");
+                        }
+                    });
+
+                } else {
+                    hideLoading();
+                    showSnackbar(error);
+                }
+            });
+        } else {
+            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+    private void setImage() {
+        final String fileName = System.currentTimeMillis() + ".png";
+        final boolean hasStoragePermission =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
+        if (hasStoragePermission || isSdkHigherThan28()) {
+//            showLoading("Saving...");
+            mSaveFileHelper.createFile(fileName, (fileCreated, filePath, error, uri) -> {
+                if (fileCreated) {
+                    SaveSettings saveSettings = new SaveSettings.Builder()
+                            .setClearViewsEnabled(true)
+                            .setTransparencyEnabled(true)
+                            .build();
+
+                    mPhotoEditor.saveAsFile(filePath, saveSettings, new PhotoEditor.OnSaveListener() {
+                        @Override
+                        public void onSuccess(@NonNull String imagePath) {
+//                            mSaveFileHelper.notifyThatFileIsNowPubliclyAvailable(getContentResolver());
+//                            hideLoading();
+//                            showSnackbar("Image Saved Successfully");
+                            mSaveImageUri = uri;
+//                            mPhotoEditorView.getSource().setImageURI(mSaveImageUri);
+//                            mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
+                            Intent i = new Intent(EditImageActivity.this, PostDetailsEditedActivity.class);
+                            i.putExtra("URI", uri.toString());
+                            i.putExtra("FILEPATH", filePath);
+                            startActivity(i);
                         }
 
                         @Override
@@ -345,6 +395,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                     mPhotoEditor.clearAllViews();
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     mPhotoEditorView.getSource().setImageBitmap(photo);
+                    mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
                     break;
                 case PICK_REQUEST:
                     try {
@@ -352,6 +403,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                         Uri uri = data.getData();
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         mPhotoEditorView.getSource().setImageBitmap(bitmap);
+                        mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -363,19 +415,19 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     @Override
     public void onColorChanged(int colorCode) {
         mPhotoEditor.setShape(mShapeBuilder.withShapeColor(colorCode));
-        mTxtCurrentTool.setText(R.string.label_brush);
+
     }
 
     @Override
     public void onOpacityChanged(int opacity) {
         mPhotoEditor.setShape(mShapeBuilder.withShapeOpacity(opacity));
-        mTxtCurrentTool.setText(R.string.label_brush);
+
     }
 
     @Override
     public void onShapeSizeChanged(int shapeSize) {
         mPhotoEditor.setShape(mShapeBuilder.withShapeSize(shapeSize));
-        mTxtCurrentTool.setText(R.string.label_brush);
+
     }
 
     @Override
@@ -386,13 +438,13 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     @Override
     public void onEmojiClick(String emojiUnicode) {
         mPhotoEditor.addEmoji(emojiUnicode);
-        mTxtCurrentTool.setText(R.string.label_emoji);
+
     }
 
     @Override
     public void onStickerClick(Bitmap bitmap) {
         mPhotoEditor.addImage(bitmap);
-        mTxtCurrentTool.setText(R.string.label_sticker);
+
     }
 
     @Override
@@ -424,7 +476,6 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 mPhotoEditor.setBrushDrawingMode(true);
                 mShapeBuilder = new ShapeBuilder();
                 mPhotoEditor.setShape(mShapeBuilder);
-                mTxtCurrentTool.setText(R.string.label_shape);
                 showBottomSheetDialogFragment(mShapeBSFragment);
                 break;
             case TEXT:
@@ -434,15 +485,15 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                     styleBuilder.withTextColor(colorCode);
 
                     mPhotoEditor.addText(inputText, styleBuilder);
-                    mTxtCurrentTool.setText(R.string.label_text);
+
                 });
                 break;
             case ERASER:
                 mPhotoEditor.brushEraser();
-                mTxtCurrentTool.setText(R.string.label_eraser_mode);
+
                 break;
             case FILTER:
-                mTxtCurrentTool.setText(R.string.label_filter);
+
                 showFilter(true);
                 break;
             case EMOJI:
@@ -490,7 +541,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     public void onBackPressed() {
         if (mIsFilterVisible) {
             showFilter(false);
-            mTxtCurrentTool.setText(R.string.app_name);
+
         } else if (!mPhotoEditor.isCacheEmpty()) {
             showSaveDialog();
         } else {

@@ -21,9 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * Created by Burhanuddin Rashid on 1/16/2018.
- */
+
 
 public class TextEditorDialogFragment extends DialogFragment {
 
@@ -82,12 +80,12 @@ public class TextEditorDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAddTextEditText = view.findViewById(R.id.add_text_edit_text);
+        mAddTextEditText = view.findViewById(R.id.tv_add_text_edit_text);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv);
+        mAddTextDoneTextView = view.findViewById(R.id.tv_add_text_done_text);
 
         //Setup the color picker for text color
-        RecyclerView addTextColorPickerRecyclerView = view.findViewById(R.id.add_text_color_picker_recycler_view);
+        RecyclerView addTextColorPickerRecyclerView = view.findViewById(R.id.rv_add_text_color_picker_text);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         addTextColorPickerRecyclerView.setLayoutManager(layoutManager);
         addTextColorPickerRecyclerView.setHasFixedSize(true);

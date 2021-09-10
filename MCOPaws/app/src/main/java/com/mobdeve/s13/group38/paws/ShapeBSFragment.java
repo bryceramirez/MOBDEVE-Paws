@@ -47,18 +47,18 @@ public class ShapeBSFragment extends BottomSheetDialogFragment implements SeekBa
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView rvColor = view.findViewById(R.id.shapeColors);
+        RecyclerView rvColor = view.findViewById(R.id.rv_shape_colors);
         SeekBar sbOpacity = view.findViewById(R.id.shapeOpacity);
         SeekBar sbBrushSize = view.findViewById(R.id.shapeSize);
         RadioGroup shapeGroup = view.findViewById(R.id.shapeRadioGroup);
 
         // shape picker
         shapeGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.lineRadioButton) {
+            if (checkedId == R.id.rb_line) {
                 mProperties.onShapePicked(ShapeType.LINE);
-            } else if (checkedId == R.id.ovalRadioButton) {
+            } else if (checkedId == R.id.rb_oval) {
                 mProperties.onShapePicked(ShapeType.OVAL);
-            } else if (checkedId == R.id.rectRadioButton) {
+            } else if (checkedId == R.id.rb_rect) {
                 mProperties.onShapePicked(ShapeType.RECTANGLE);
             } else {
                 mProperties.onShapePicked(ShapeType.BRUSH);

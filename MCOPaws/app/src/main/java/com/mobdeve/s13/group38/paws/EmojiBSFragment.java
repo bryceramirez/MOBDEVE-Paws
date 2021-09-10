@@ -30,6 +30,7 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
         void onEmojiClick(String emojiUnicode);
     }
 
+
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
 
         @Override
@@ -58,7 +59,7 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
         ((View) contentView.getParent()).setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        RecyclerView rvEmoji = contentView.findViewById(R.id.rvEmoji);
+        RecyclerView rvEmoji = contentView.findViewById(R.id.rv_emoji_fragmentst);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 5);
         rvEmoji.setLayoutManager(gridLayoutManager);
@@ -96,7 +97,7 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
 
             ViewHolder(View itemView) {
                 super(itemView);
-                txtEmoji = itemView.findViewById(R.id.txtEmoji);
+                txtEmoji = itemView.findViewById(R.id.tv_emoji_row);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -111,12 +112,6 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
         }
     }
 
-    /**
-     * Provide the list of emoji in form of unicode string
-     *
-     * @param context context
-     * @return list of emoji unicode
-     */
     public static ArrayList<String> getEmojis(Context context) {
         ArrayList<String> convertedEmojiList = new ArrayList<>();
         String[] emojiList = context.getResources().getStringArray(R.array.photo_editor_emoji);

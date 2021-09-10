@@ -3,9 +3,7 @@ package com.mobdeve.s13.group38.paws;
 import android.app.Application;
 import android.content.Context;
 
-/**
- * Created by Burhanuddin Rashid on 1/23/2018.
- */
+
 
 public class PhotoApp extends Application {
     private static PhotoApp sPhotoApp;

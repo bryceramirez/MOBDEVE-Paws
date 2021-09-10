@@ -34,7 +34,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         this.ibAdd.setOnClickListener(view->{
-            Intent i = new Intent(HomeActivity.this, PostDetailsActivity.class);
+            Intent i = new Intent(HomeActivity.this, EditImageActivity.class);
             startActivity(i);
         });
 

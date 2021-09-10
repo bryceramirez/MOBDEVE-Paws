@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
+import android.provider.MediaStore;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,14 +24,12 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
-import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
-import ja.burhanrashid52.photoeditor.ViewType;
-
 public class PostDetailsEditedActivity extends AppCompatActivity{
     private ImageButton ibHome;
     private ImageButton ibAdd;
     private ImageButton ibProfile;
     private ImageView ivPhoto;
+    private Button btnPost;
 
     private Uri imageUri;
 
@@ -42,6 +41,18 @@ public class PostDetailsEditedActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_details_edited);
         this.initComponents();
+
+        Intent i = getIntent();
+        this.imageUri = Uri.parse(i.getStringExtra("URI"));
+        String path = i.getStringExtra("FILEPATH");
+
+        try{
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            this.ivPhoto.setImageBitmap(bitmap);
+        }
+        catch(Exception e) {
+
+        }
         this.initFirebase();
     }
 
@@ -51,10 +62,16 @@ public class PostDetailsEditedActivity extends AppCompatActivity{
         this.ibProfile = findViewById(R.id.btn_profile_post);
         this.ivPhoto = findViewById(R.id.iv_photo_post);
 
+        this.btnPost = findViewById(R.id.btn_post_edit);
         // set iv photo from previous activity here
 
-        this.ibHome.setOnClickListener(view->{
+        this.btnPost.setOnClickListener(view->{
             uploadPicture();
+            Intent i = new Intent(PostDetailsEditedActivity.this, HomeActivity.class);
+            startActivity(i);
+        });
+
+        this.ibHome.setOnClickListener(view->{
             Intent i = new Intent(PostDetailsEditedActivity.this, HomeActivity.class);
             startActivity(i);
         });

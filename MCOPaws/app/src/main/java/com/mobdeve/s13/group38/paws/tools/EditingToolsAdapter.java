@@ -14,11 +14,7 @@ import com.mobdeve.s13.group38.paws.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
- * @version 0.1.2
- * @since 5/23/2018
- */
+
 public class EditingToolsAdapter extends RecyclerView.Adapter<EditingToolsAdapter.ViewHolder> {
 
     private List<ToolModel> mToolList = new ArrayList<>();
@@ -77,8 +73,8 @@ public class EditingToolsAdapter extends RecyclerView.Adapter<EditingToolsAdapte
 
         ViewHolder(View itemView) {
             super(itemView);
-            imgToolIcon = itemView.findViewById(R.id.imgToolIcon);
-            txtTool = itemView.findViewById(R.id.txtTool);
+            imgToolIcon = itemView.findViewById(R.id.iv_img_tool_icon);
+            txtTool = itemView.findViewById(R.id.tv_text_tool);
             itemView.setOnClickListener(v -> mOnItemSelected.onToolSelected(mToolList.get(getLayoutPosition()).mToolType));
         }
     }

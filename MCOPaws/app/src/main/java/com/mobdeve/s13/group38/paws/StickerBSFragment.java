@@ -64,7 +64,7 @@ public class StickerBSFragment extends BottomSheetDialogFragment {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
         ((View) contentView.getParent()).setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        RecyclerView rvEmoji = contentView.findViewById(R.id.rvEmoji);
+        RecyclerView rvEmoji = contentView.findViewById(R.id.rv_emoji_fragmentst);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         rvEmoji.setLayoutManager(gridLayoutManager);
@@ -80,7 +80,7 @@ public class StickerBSFragment extends BottomSheetDialogFragment {
 
     public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.ViewHolder> {
 
-        int[] stickerList = new int[]{R.drawable.aa, R.drawable.bb};
+        int[] stickerList = new int[]{R.drawable.s1, R.drawable.s2, R.drawable.s3, R.drawable.s4, R.drawable.s5, R.drawable.s6, R.drawable.s7, R.drawable.s8, R.drawable.s9, R.drawable.s10, R.drawable.s11, R.drawable.s12};
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -103,7 +103,7 @@ public class StickerBSFragment extends BottomSheetDialogFragment {
 
             ViewHolder(View itemView) {
                 super(itemView);
-                imgSticker = itemView.findViewById(R.id.imgSticker);
+                imgSticker = itemView.findViewById(R.id.iv_sticker);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
