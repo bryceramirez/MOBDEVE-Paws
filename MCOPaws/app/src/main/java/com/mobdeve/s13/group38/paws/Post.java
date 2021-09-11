@@ -1,23 +1,35 @@
 package com.mobdeve.s13.group38.paws;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Post {
-    private int photo;
+    private String user;
+    private String photo;
     private ArrayList<String> likes;
     private ArrayList<String> comments;
     private String datePosted;
     private String description;
 
-    public Post(int photo, ArrayList<String> likes, ArrayList<String> comments, String datePosted, String description){
+    public Post(){
+
+    }
+
+    public Post(String user, String photo, ArrayList<String> likes, ArrayList<String> comments, String datePosted, String description){
+        this.user = user;
         this.photo = photo;
         this.likes = likes;
         this.comments = comments;
         this.datePosted = datePosted;
         this.description = description;
     }
+    public String getUser(){
+        return this.user;
+    }
 
-    public int getPhoto() {
+    public String getPhoto() {
         return this.photo;
     }
 
@@ -30,10 +42,19 @@ public class Post {
     }
 
     public String getDatePosted(){
-        return this.datePosted;
+        String[] splitString = datePosted.split("\\s+");
+        String date = splitString[0] + " " + splitString[1] + ", " + splitString[2] + " " + splitString[5];
+        return date;
     }
 
     public String getDescription(){
         return this.description;
+    }
+
+    public String getFormattedDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+
+        String formattedDate = formatter.format(this.datePosted);
+        return formattedDate;
     }
 }
