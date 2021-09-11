@@ -85,30 +85,11 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                 holder.setTvUsername(username);
                 holder.setTvTime(currentPost.getDatePosted());
 
-                DatabaseReference getImage = reference.child("image");
+                DatabaseReference getImage = reference.child("images");
+                storage = FirebaseStorage.getInstance("gs://mobdeve-paws.appspot.com");
+                storageReference = storage.getReference().child("images");
 
-                // Adding listener for a single change
-                // in the data at this location.
-                // this listener will triggered once
-                // with the value of the data at the location
-                getImage.child(currentPost.getPhoto()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        // getting a DataSnapshot for the location at the specified
-                        // relative path and getting in the link variable
-                        String link = dataSnapshot.getValue(String.class);
-
-                        // loading that data into rImage
-                        // variable which is ImageView
-                        Picasso.get().load(link).into(holder.getIvPostPhoto());
-                    }
-                    // this will called when any problem
-                    // occurs in getting data
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // we are showing that error message in toast
-                    }
-                });
+                Glide.with(holder.getIvPostPhoto().getContext()).load(storageReference.child(currentPost.getPhoto())).into(holder.getIvPostPhoto());
             }
 //                holder.setIvPostPhoto(R.drawable.seal);
             @Override
@@ -127,8 +108,8 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
     }
 
     private void initFirebase(){
-        this.storage = FirebaseStorage.getInstance("gs://mobdeve-paws.appspot.com");
-        this.storageReference = storage.getReference();
+
+//        this.storageReference = storage.getReference();
         this.mAuth = FirebaseAuth.getInstance();
     }
 
