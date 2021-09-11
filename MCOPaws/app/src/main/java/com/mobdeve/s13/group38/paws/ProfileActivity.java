@@ -3,6 +3,9 @@ package com.mobdeve.s13.group38.paws;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Build;
@@ -22,7 +25,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +49,10 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton ibProfile;
     private ImageButton ibLogout;
     private ImageButton ibEdit;
+    private RecyclerView rvPostProfile;
+    private PostProfileAdapter postProfileAdapter;
+
+    private ArrayList<Post> posts = new ArrayList<Post>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +108,9 @@ public class ProfileActivity extends AppCompatActivity {
         this.user = this.mAuth.getCurrentUser();
         this.userId = this.user.getUid();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference(Collections.users.name());
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
 
-        reference.child(this.userId).addValueEventListener(new ValueEventListener() {
+        reference.child(Collections.users.name()).child(this.userId).addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -131,6 +141,47 @@ public class ProfileActivity extends AppCompatActivity {
                 tvName.setText(name);
                 tvBreed.setText(breed);
                 tvDescription.setText(description);
+
+                reference.child(Collections.posts.name()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot ds: snapshot.getChildren()){
+                            String user = ds.child("user").getValue().toString();
+                            if(user.equals(userId)){
+                                String photo = ds.child("photo").getValue().toString();
+
+                                ArrayList<String> likes = new ArrayList<String>();
+                                for (DataSnapshot dsLikes: ds.child("likes").getChildren())
+                                    likes.add(dsLikes.getValue().toString());
+                                ArrayList<String> comments = new ArrayList<String>();
+                                for (DataSnapshot dsComments: ds.child("comments").getChildren())
+                                    comments.add(dsComments.getValue().toString());
+
+                                String datePosted = ds.child("datePosted").getValue().toString();
+
+                                String description = ds.child("description").getValue().toString();
+                                posts.add(new Post(user, photo, likes, comments, datePosted, description));
+                            }
+                        }
+                        System.out.println(posts);
+
+                        Comparator<Post> compareById = (Post o1, Post o2) -> new Date(o1.getDatePosted()).compareTo( new Date(o2.getDatePosted()) );
+
+                        posts.sort(compareById);
+
+                        rvPostProfile = findViewById(R.id.rv_posts_profile);
+                        rvPostProfile.setLayoutManager(new GridLayoutManager(ProfileActivity.this, 3));
+
+
+                        postProfileAdapter = new PostProfileAdapter(posts);
+                        rvPostProfile.setAdapter(postProfileAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override

@@ -28,7 +28,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -77,6 +80,7 @@ public class HomeActivity extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference(Collections.posts.name());
 
         reference.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds: snapshot.getChildren()){
@@ -98,6 +102,10 @@ public class HomeActivity extends AppCompatActivity {
 //                    Post post = ;
                     posts.add(new Post(user, photo, likes, comments, datePosted, description));
                 }
+                Comparator<Post> compareById = (Post o1, Post o2) -> new Date(o1.getDatePosted()).compareTo( new Date(o2.getDatePosted()) );
+                posts.sort(compareById);
+                java.util.Collections.reverse(posts);
+
                 rvPostHome = findViewById(R.id.rv_home_posts);
                 rvPostHome.setLayoutManager(new LinearLayoutManager(HomeActivity.this, LinearLayoutManager.VERTICAL, false));
 
