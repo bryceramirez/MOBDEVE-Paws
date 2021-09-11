@@ -51,6 +51,10 @@ public class PostHomeViewHolder extends RecyclerView.ViewHolder {
         return ivPostPhoto;
     }
 
+    public TextView getTvUsername(){
+        return tvUsername;
+    }
+
     public void setTvUsername(String username) {
         this.tvUsername.setText(username);
     }
@@ -85,6 +89,10 @@ public class PostHomeViewHolder extends RecyclerView.ViewHolder {
 
     public ImageButton getIbComment() {
         return this.ibComment;
+    }
+
+    public ImageView getIvUserImage() {
+        return this.ivUserImage;
     }
 
     public void setLikeBtnOnClickListener(View.OnClickListener onClickListener) {

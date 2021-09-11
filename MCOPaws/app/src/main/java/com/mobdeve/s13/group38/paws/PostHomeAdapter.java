@@ -71,6 +71,16 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                holder.setIvUserImage();
+                String profilepic = snapshot.child("profilepic").getValue().toString();
+                if(!profilepic.equals("none")) {
+                    storage = FirebaseStorage.getInstance("gs://mobdeve-paws.appspot.com");
+                    storageReference = storage.getReference().child("images");
+                    Glide.with(holder.getIvPostPhoto().getContext()).load(storageReference.child(profilepic)).into(holder.getIvUserImage());
+                }
+                else{
+                    holder.getIvUserImage().setImageResource(R.drawable.paw);
+                }
+
                 String username = snapshot.child("name").getValue().toString();
                 if(!currentPost.getDescription().equals("")) {
                     holder.setTvCaptionUsername(username);
@@ -92,7 +102,7 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
 
                 Glide.with(holder.getIvPostPhoto().getContext()).load(storageReference.child(currentPost.getPhoto())).into(holder.getIvPostPhoto());
 
-                holder.getLlPost().setOnClickListener(new View.OnClickListener() {
+                holder.getIvPostPhoto().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view){
                         Intent i = new Intent(view.getContext(), ViewPostActivity.class);
@@ -104,6 +114,29 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                         i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
                         i.putExtra("TIME", date);
                         i.putExtra("PHOTO", currentPost.getPhoto());
+                        i.putExtra("PROFILEPIC", profilepic);
+
+                        view.getContext().startActivity(i);
+                    }
+                });
+
+                holder.getIvUserImage().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        Intent i = new Intent(view.getContext(), ProfileActivity.class);
+
+                        i.putExtra("USER", currentPost.getUser());
+
+                        view.getContext().startActivity(i);
+                    }
+                });
+
+                holder.getTvUsername().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        Intent i = new Intent(view.getContext(), ProfileActivity.class);
+
+                        i.putExtra("USER", currentPost.getUser());
 
                         view.getContext().startActivity(i);
                     }
@@ -115,11 +148,13 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                         Intent i = new Intent(view.getContext(), ViewPostActivity.class);
 
                         i.putExtra("USERNAME", username);
+                        i.putExtra("USER", currentPost.getUser());
                         i.putExtra("DESCRIPTION", currentPost.getDescription());
                         i.putExtra("COMMENTS", currentPost.getComments());
                         i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
-                        i.putExtra("TIME", currentPost.getDatePosted());
+                        i.putExtra("TIME", date);
                         i.putExtra("PHOTO", currentPost.getPhoto());
+                        i.putExtra("PROFILEPIC", profilepic);
 
                         view.getContext().startActivity(i);
                     }

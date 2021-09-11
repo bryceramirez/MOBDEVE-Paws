@@ -11,8 +11,9 @@ public class User {
     private String breed;
     private String birthday;
     private String description;
+    private String profilepic;
 
-    public User(String email, String password, String gender, String name, String breed, String birthday, String description){
+    public User(String email, String password, String gender, String name, String breed, String birthday, String description, String profilepic){
         this.email = email;
         this.password = password;
         this.gender = gender;
@@ -20,6 +21,7 @@ public class User {
         this.breed = breed;
         this.birthday = birthday;
         this.description = description;
+        this.profilepic = profilepic;
     }
 
     public String getEmail(){
@@ -48,6 +50,10 @@ public class User {
 
     public String getDescription(){
         return this.description;
+    }
+
+    public String getProfilepic() {
+        return this.profilepic;
     }
 
 }

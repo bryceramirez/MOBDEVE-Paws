@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -53,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
     private PostHomeAdapter postHomeAdapter;
     private RecyclerView rvPostHome;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,12 @@ public class HomeActivity extends AppCompatActivity {
         this.initComponents();
         this.initFirebase();
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        posts = new ArrayList<>();
     }
 
     private void initFirebase(){
@@ -83,6 +91,7 @@ public class HomeActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                posts = new ArrayList<>();
                 for(DataSnapshot ds: snapshot.getChildren()){
 //                    posts.add(ds.child("user").getValue(Post.class));
 

@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             try {
                 if(!checkEmpty(email, password, gender, name, breed, birthday)){
-                    User user = new User(email, password, gender, name, breed, birthday, description);
+                    User user = new User(email, password, gender, name, breed, birthday, description, "none");
                     storeUser(user);
                 }
             } catch (ParseException e) {

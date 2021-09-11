@@ -22,31 +22,34 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class PostProfileAdapter extends RecyclerView.Adapter<PostProfileViewHolder> {
+public class PostSearchAdapter extends RecyclerView.Adapter<PostSearchViewHolder> {
     private ArrayList<Post> dataPosts;
     private FirebaseAuth mAuth;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
 
-    public PostProfileAdapter(ArrayList<Post> dataPosts){
+    public PostSearchAdapter(ArrayList<Post> dataPosts){
         this.dataPosts = dataPosts;
     }
 
     @NonNull
     @NotNull
     @Override
-    public PostProfileViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public PostSearchViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         initFirebase();
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(R.layout.item_profile_grid, parent, false);
 
-        PostProfileViewHolder postProfileViewHolder = new PostProfileViewHolder(itemView);
+        PostSearchViewHolder postSearchViewHolder = new PostSearchViewHolder(itemView);
 
-        return postProfileViewHolder;
+
+        return postSearchViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull PostProfileViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull PostSearchViewHolder holder, int position) {
         initFirebase();
         Post currentPost = this.dataPosts.get(position);
         this.mAuth = FirebaseAuth.getInstance();
@@ -56,8 +59,8 @@ public class PostProfileAdapter extends RecyclerView.Adapter<PostProfileViewHold
         reference.child(Collections.users.name()).child(currentPost.getUser()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String username = snapshot.child("name").getValue().toString();
                 String profilepic = snapshot.child("profilepic").getValue().toString();
+                String username = snapshot.child("name").getValue().toString();
                 String[] splitString = currentPost.getDatePosted().split("\\s+");
                 String date = splitString[0] + " " + splitString[1] + ", " + splitString[2] + " " + splitString[5];
 
@@ -91,8 +94,8 @@ public class PostProfileAdapter extends RecyclerView.Adapter<PostProfileViewHold
 
             }
         });
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -103,5 +106,7 @@ public class PostProfileAdapter extends RecyclerView.Adapter<PostProfileViewHold
 
 //        this.storageReference = storage.getReference();
         this.mAuth = FirebaseAuth.getInstance();
+        this.database = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        this.databaseReference = database.getReference(Collections.posts.name());
     }
 }

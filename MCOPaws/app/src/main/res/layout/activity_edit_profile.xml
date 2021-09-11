@@ -48,21 +48,6 @@
         app:layout_constraintGuide_begin="72dp" />
 
     <EditText
-        android:id="@+id/et_email_edit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#000000"
-        android:ems="10"
-        android:hint="email@yahoo.com"
-        android:inputType="textEmailAddress"
-        android:textColorHighlight="#000000"
-        android:textColorLink="#000000"
-        app:layout_constraintEnd_toStartOf="@+id/gl_right_edit"
-        app:layout_constraintStart_toEndOf="@+id/tv_email_edit"
-        app:layout_constraintTop_toBottomOf="@+id/tv_edit_title" />
-
-    <EditText
         android:id="@+id/et_name_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -82,7 +67,7 @@
         android:id="@+id/et_gender_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="#000000"
         android:editable="false"
         android:ems="10"
@@ -93,7 +78,7 @@
         app:layout_constraintEnd_toStartOf="@+id/gl_right_edit"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tv_gender_edit"
-        app:layout_constraintTop_toBottomOf="@+id/et_password_edit" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_edit_title" />
 
     <EditText
         android:id="@+id/et_breed_edit"
@@ -151,31 +136,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_black" />
 
-    <EditText
-        android:id="@+id/et_password_edit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#000000"
-        android:ems="10"
-        android:hint="minimum of 6 characters"
-        android:inputType="textPassword"
-        android:textColorHighlight="#000000"
-        android:textColorLink="#000000"
-        app:layout_constraintEnd_toStartOf="@+id/gl_right_edit"
-        app:layout_constraintStart_toEndOf="@+id/tv_password_edit"
-        app:layout_constraintTop_toBottomOf="@+id/et_email_edit" />
-
-    <TextView
-        android:id="@+id/tv_email_edit"
-        android:layout_width="100sp"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_email_edit"
-        app:layout_constraintStart_toStartOf="@+id/gl_left_edit"
-        app:layout_constraintTop_toTopOf="@+id/et_email_edit" />
-
     <TextView
         android:id="@+id/tv_gender_edit"
         android:layout_width="100sp"
@@ -185,16 +145,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/et_gender_edit"
         app:layout_constraintStart_toStartOf="@+id/gl_left_edit"
         app:layout_constraintTop_toTopOf="@+id/et_gender_edit" />
-
-    <TextView
-        android:id="@+id/tv_password_edit"
-        android:layout_width="100sp"
-        android:layout_height="wrap_content"
-        android:text="Password"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_password_edit"
-        app:layout_constraintStart_toStartOf="@+id/gl_left_edit"
-        app:layout_constraintTop_toTopOf="@+id/et_password_edit" />
 
     <TextView
         android:id="@+id/tv_name_edit"
