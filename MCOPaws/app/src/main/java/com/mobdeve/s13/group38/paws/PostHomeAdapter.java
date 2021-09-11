@@ -1,5 +1,6 @@
 package com.mobdeve.s13.group38.paws;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,22 +40,20 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(R.layout.item_user_post, parent, false);
 
+
         PostHomeViewHolder postHomeViewHolder = new PostHomeViewHolder(itemView);
-
-        postHomeViewHolder.getLlPost().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                // FOR COMMENTS
-            }
-        });
-
-        postHomeViewHolder.setLikeBtnOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //LIKE
-
-            }
-        });
+//
+//        postHomeViewHolder.setLikeBtnOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //LIKE
+//
+//            }
+//        });
+//
+//        postHomeViewHolder.getIbComment().setOnClickListener(view-> {
+//
+//        });
 
         return postHomeViewHolder;
     }
@@ -83,13 +82,48 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                 holder.setTvComments(currentPost.getComments().size()-1+"");
                 holder.setTvLikes(currentPost.getLikes().size()-1+"");
                 holder.setTvUsername(username);
-                holder.setTvTime(currentPost.getDatePosted());
 
-                DatabaseReference getImage = reference.child("images");
+                String[] splitString = currentPost.getDatePosted().split("\\s+");
+                String date = splitString[0] + " " + splitString[1] + ", " + splitString[2] + " " + splitString[5];
+                holder.setTvTime(date);
+
                 storage = FirebaseStorage.getInstance("gs://mobdeve-paws.appspot.com");
                 storageReference = storage.getReference().child("images");
 
                 Glide.with(holder.getIvPostPhoto().getContext()).load(storageReference.child(currentPost.getPhoto())).into(holder.getIvPostPhoto());
+
+                holder.getLlPost().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        Intent i = new Intent(view.getContext(), ViewPostActivity.class);
+
+                        i.putExtra("USERNAME", username);
+                        i.putExtra("USER", currentPost.getUser());
+                        i.putExtra("DESCRIPTION", currentPost.getDescription());
+                        i.putExtra("COMMENTS", currentPost.getComments());
+                        i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
+                        i.putExtra("TIME", date);
+                        i.putExtra("PHOTO", currentPost.getPhoto());
+
+                        view.getContext().startActivity(i);
+                    }
+                });
+
+                holder.getIbComment().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+                        Intent i = new Intent(view.getContext(), ViewPostActivity.class);
+
+                        i.putExtra("USERNAME", username);
+                        i.putExtra("DESCRIPTION", currentPost.getDescription());
+                        i.putExtra("COMMENTS", currentPost.getComments());
+                        i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
+                        i.putExtra("TIME", currentPost.getDatePosted());
+                        i.putExtra("PHOTO", currentPost.getPhoto());
+
+                        view.getContext().startActivity(i);
+                    }
+                });
             }
 //                holder.setIvPostPhoto(R.drawable.seal);
             @Override

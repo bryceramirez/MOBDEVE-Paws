@@ -24,6 +24,7 @@ public class PostHomeViewHolder extends RecyclerView.ViewHolder {
     private LinearLayout llPost;
     private LinearLayout llCaption;
     private ImageButton ibLike;
+    private ImageButton ibComment;
 
     public PostHomeViewHolder(@NonNull @NotNull View itemView) {
         super(itemView);
@@ -38,6 +39,7 @@ public class PostHomeViewHolder extends RecyclerView.ViewHolder {
         this.llCaption = itemView.findViewById(R.id.ll_caption);
         this.ivPostPhoto = itemView.findViewById(R.id.iv_post_photo);
         this.ibLike = itemView.findViewById(R.id.btn_post_like);
+        this.ibComment = itemView.findViewById(R.id.btn_post_comment);
     }
 
     public void setIvUserImage(int userImage) {
@@ -81,6 +83,9 @@ public class PostHomeViewHolder extends RecyclerView.ViewHolder {
         return this.llCaption;
     }
 
+    public ImageButton getIbComment() {
+        return this.ibComment;
+    }
 
     public void setLikeBtnOnClickListener(View.OnClickListener onClickListener) {
         this.ibLike.setOnClickListener(onClickListener);

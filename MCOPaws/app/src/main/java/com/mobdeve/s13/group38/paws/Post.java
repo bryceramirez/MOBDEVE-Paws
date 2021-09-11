@@ -13,10 +13,6 @@ public class Post {
     private String datePosted;
     private String description;
 
-    public Post(){
-
-    }
-
     public Post(String user, String photo, ArrayList<String> likes, ArrayList<String> comments, String datePosted, String description){
         this.user = user;
         this.photo = photo;
@@ -42,19 +38,18 @@ public class Post {
     }
 
     public String getDatePosted(){
-        String[] splitString = datePosted.split("\\s+");
-        String date = splitString[0] + " " + splitString[1] + ", " + splitString[2] + " " + splitString[5];
-        return date;
+
+        return datePosted;
     }
 
     public String getDescription(){
         return this.description;
     }
 
-    public String getFormattedDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-
-        String formattedDate = formatter.format(this.datePosted);
-        return formattedDate;
-    }
+//    public String getFormattedDate() {
+//        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+//
+//        String formattedDate = formatter.format(this.datePosted);
+//        return formattedDate;
+//    }
 }
