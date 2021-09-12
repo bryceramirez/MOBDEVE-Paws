@@ -4,17 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "100";
+    //    private static final String TAG = ;
     private TextView tvRegister;
     private EditText etEmail;
     private EditText etPassword;
@@ -31,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
+    private final static int RC_SIGN_IN = 444;
+    private ImageButton ibGoogle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         this.initFirebase();
         this.initComponents();
+        this.googleSignIn();
+
+//        ibGoogle.setOnClickListener(new View.onClickListener());
     }
 
     private void initFirebase(){
@@ -45,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initComponents(){
+        this.ibGoogle = findViewById(R.id.btn_google);
         this.tvRegister = findViewById(R.id.tv_register_login);
         this.etEmail = findViewById(R.id.et_email_login);
         this.etPassword = findViewById(R.id.et_password_login);
@@ -61,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
             String password = etPassword.getText().toString().trim();
             signIn(email,password);
         });
+
+
+        this.ibGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signInGoogle();
+            }
+        });
     }
 
     private void googleSignIn(){
@@ -70,8 +92,36 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+    }
+    private void signInGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+            }
+        }
+    }
+
+
+
+    private void firebaseAuthWithGoogle(String idToken) {
     }
 
     private void signIn(String email, String password){
