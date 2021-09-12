@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -47,6 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
 
+    GoogleSignInOptions gso;
+//    GoogleSignInClient
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,8 @@ public class RegisterActivity extends AppCompatActivity {
         this.initFirebase();
         this.initComponents();
     }
+
+
 
     private void initFirebase() {
         this.mAuth = FirebaseAuth.getInstance();

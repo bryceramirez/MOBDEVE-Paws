@@ -75,7 +75,7 @@ public class PostProfileAdapter extends RecyclerView.Adapter<PostProfileViewHold
                         i.putExtra("USER", currentPost.getUser());
                         i.putExtra("DESCRIPTION", currentPost.getDescription());
                         i.putExtra("COMMENTS", currentPost.getComments());
-                        i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
+                        i.putExtra("LIKES", currentPost.getLikes().size()+"");
                         i.putExtra("TIME", date);
                         i.putExtra("PHOTO", currentPost.getPhoto());
                         i.putExtra("PROFILEPIC", profilepic);

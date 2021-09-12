@@ -45,6 +45,7 @@ public class EditActivity extends AppCompatActivity {
 
     private String email;
     private String password;
+    private String profilepic;
 
     private ProgressBar pbEdit;
 
@@ -78,7 +79,7 @@ public class EditActivity extends AppCompatActivity {
 
             try {
                 if(!checkEmpty(email, password, gender, name, breed, birthday)){
-                    User user = new User(email, password, gender, name, breed, birthday, description, "paw.jpg");
+                    User user = new User(email, password, gender, name, breed, birthday, description, profilepic);
                     storeUser(user);
                 }
             } catch (ParseException e) {
@@ -173,6 +174,7 @@ public class EditActivity extends AppCompatActivity {
                 String breed = snapshot.child("breed").getValue().toString();
                 String description = snapshot.child("description").getValue().toString();
 
+
                 etName.setText(name);
                 etBirthday.setText(birthday);
                 etGender.setText(gender);
@@ -181,6 +183,7 @@ public class EditActivity extends AppCompatActivity {
 
                 email = snapshot.child("email").getValue().toString();
                 password = snapshot.child("password").getValue().toString();
+                profilepic = snapshot.child("profilepic").getValue().toString();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

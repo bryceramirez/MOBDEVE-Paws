@@ -1,14 +1,18 @@
 package com.mobdeve.s13.group38.paws;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +31,10 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
     private FirebaseAuth mAuth;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+
+    private boolean liked = false;
 
     public PostHomeAdapter(ArrayList<Post> dataPosts){
         this.dataPosts = dataPosts;
@@ -70,7 +78,6 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
         reference.child(Collections.users.name()).child(currentPost.getUser()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                holder.setIvUserImage();
                 String profilepic = snapshot.child("profilepic").getValue().toString();
                 if(!profilepic.equals("none")) {
                     storage = FirebaseStorage.getInstance("gs://mobdeve-paws.appspot.com");
@@ -81,6 +88,15 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                     holder.getIvUserImage().setImageResource(R.drawable.paw);
                 }
 
+                if(currentPost.getLikes().contains(mAuth.getCurrentUser().getUid())) {
+                    holder.getIbLike().setColorFilter(Color.parseColor("#FF9800"));
+                    liked = true;
+                }
+                else{
+                    holder.getIbLike().setColorFilter(Color.parseColor("#262626"));
+                    liked = false;
+                }
+
                 String username = snapshot.child("name").getValue().toString();
                 if(!currentPost.getDescription().equals("")) {
                     holder.setTvCaptionUsername(username);
@@ -89,8 +105,8 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                 else{
                     holder.getLlCaption().setVisibility(View.GONE);
                 }
-                holder.setTvComments(currentPost.getComments().size()-1+"");
-                holder.setTvLikes(currentPost.getLikes().size()-1+"");
+                holder.setTvComments(currentPost.getComments().size()+"");
+                holder.setTvLikes(currentPost.getLikes().size()+"");
                 holder.setTvUsername(username);
 
                 String[] splitString = currentPost.getDatePosted().split("\\s+");
@@ -102,6 +118,39 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
 
                 Glide.with(holder.getIvPostPhoto().getContext()).load(storageReference.child(currentPost.getPhoto())).into(holder.getIvPostPhoto());
 
+                holder.getIbLike().setOnClickListener(view->{
+                    ArrayList<String> updatedLikes;
+                    liked = currentPost.getLikes().contains(mAuth.getCurrentUser().getUid());
+                    if(liked) {
+                        currentPost.getLikes().remove(mAuth.getCurrentUser().getUid());
+                        holder.getIbLike().setColorFilter(Color.parseColor("#262626"));
+                    }
+                    else {
+                        currentPost.getLikes().add(mAuth.getCurrentUser().getUid());
+                        holder.getIbLike().setColorFilter(Color.parseColor("#FF9800"));
+                    }
+//                    liked = !liked;
+
+                    holder.setTvLikes(currentPost.getLikes().size()+"");
+                    updatedLikes = currentPost.getLikes();
+
+                    database.getReference(Collections.posts.name())
+                            .child(currentPost.getPhoto())
+                            .child("likes")
+                            .setValue(updatedLikes).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+//                                Toast.makeText(holder.getIvPostPhoto().getContext(), "Description changed", Toast.LENGTH_SHORT).show();
+//                                tvCaptionDescription.setText();
+                            }
+                            else{
+//                                Toast.makeText(holder.getIvPostPhoto().getContext(), "Failed to change description", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                });
+
                 holder.getIvPostPhoto().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view){
@@ -111,7 +160,7 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                         i.putExtra("USER", currentPost.getUser());
                         i.putExtra("DESCRIPTION", currentPost.getDescription());
                         i.putExtra("COMMENTS", currentPost.getComments());
-                        i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
+                        i.putExtra("LIKES", currentPost.getLikes().size()+"");
                         i.putExtra("TIME", date);
                         i.putExtra("PHOTO", currentPost.getPhoto());
                         i.putExtra("PROFILEPIC", profilepic);
@@ -151,7 +200,7 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
                         i.putExtra("USER", currentPost.getUser());
                         i.putExtra("DESCRIPTION", currentPost.getDescription());
                         i.putExtra("COMMENTS", currentPost.getComments());
-                        i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
+                        i.putExtra("LIKES", currentPost.getLikes().size()+"");
                         i.putExtra("TIME", date);
                         i.putExtra("PHOTO", currentPost.getPhoto());
                         i.putExtra("PROFILEPIC", profilepic);
@@ -177,9 +226,11 @@ public class PostHomeAdapter extends RecyclerView.Adapter<PostHomeViewHolder>{
     }
 
     private void initFirebase(){
-
-//        this.storageReference = storage.getReference();
+        this.storage = FirebaseStorage.getInstance("gs://mobdeve-paws.appspot.com");
+        this.storageReference = storage.getReference();
         this.mAuth = FirebaseAuth.getInstance();
+        this.database = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        this.databaseReference = database.getReference(Collections.posts.name());
     }
 
 }

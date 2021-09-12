@@ -95,6 +95,10 @@ public class PostHomeViewHolder extends RecyclerView.ViewHolder {
         return this.ivUserImage;
     }
 
+    public ImageButton getIbLike() {
+        return this.ibLike;
+    }
+
     public void setLikeBtnOnClickListener(View.OnClickListener onClickListener) {
         this.ibLike.setOnClickListener(onClickListener);
     }

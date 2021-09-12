@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95bc7efc-b81e-42bf-bb48-b81dc6cee26c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/MCOPaws/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MCOPaws/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MCOPaws/.idea/gradle.xml" afterDir="false" />
-    </list>
+    <list default="true" id="95bc7efc-b81e-42bf-bb48-b81dc6cee26c" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

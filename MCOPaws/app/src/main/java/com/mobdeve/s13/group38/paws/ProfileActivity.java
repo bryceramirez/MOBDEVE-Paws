@@ -88,20 +88,14 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         initComponents();
+        rvPostProfile = findViewById(R.id.rv_posts_profile);
+        rvPostProfile.setLayoutManager(new GridLayoutManager(ProfileActivity.this, 3));
+
+        postProfileAdapter = new PostProfileAdapter(posts);
+
+        rvPostProfile.setAdapter(postProfileAdapter);
         initFirebase();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        posts = new ArrayList<>();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        posts = new ArrayList<>();
-    }
-
 
     private void initComponents() {
         this.tvName = findViewById(R.id.tv_name_profile);
@@ -131,6 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
         this.ibProfile.setOnClickListener(view -> {
             Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
             startActivity(i);
+            finish();
         });
 
         this.ibEdit.setOnClickListener(view -> {
@@ -204,10 +199,12 @@ public class ProfileActivity extends AppCompatActivity {
                     Glide.with(ProfileActivity.this).load(storageReference.child(profilepic)).into(ivProfile);
                 }
 
-                posts = new ArrayList<>();
                 reference.child(Collections.posts.name()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (posts.size() > 0) {
+                            posts.clear();
+                        }
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             String user = ds.child("user").getValue().toString();
                             if (user.equals(userId)) {
@@ -223,7 +220,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 String datePosted = ds.child("datePosted").getValue().toString();
 
                                 String description = ds.child("description").getValue().toString();
-                                posts.add(new Post(user, photo, likes, comments, datePosted, description));
+                                posts.add(0, new Post(user, photo, likes, comments, datePosted, description));
                             }
                         }
 //                        System.out.println(posts);
@@ -233,14 +230,7 @@ public class ProfileActivity extends AppCompatActivity {
                         posts.sort(compareById);
 
                         java.util.Collections.reverse(posts);
-
-                        rvPostProfile = findViewById(R.id.rv_posts_profile);
-                        rvPostProfile.setLayoutManager(new GridLayoutManager(ProfileActivity.this, 3));
-
-
-                        postProfileAdapter = new PostProfileAdapter(posts);
-
-                        rvPostProfile.setAdapter(postProfileAdapter);
+                        postProfileAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -248,6 +238,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     }
                 });
+                postProfileAdapter.notifyDataSetChanged();
             }
 
             @Override

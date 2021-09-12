@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar pbLogin;
 
     private FirebaseAuth mAuth;
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,17 @@ public class MainActivity extends AppCompatActivity {
             String password = etPassword.getText().toString().trim();
             signIn(email,password);
         });
+    }
+
+    private void googleSignIn(){
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
     }
 
     private void signIn(String email, String password){

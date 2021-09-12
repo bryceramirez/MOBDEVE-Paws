@@ -61,15 +61,27 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         this.initComponents();
+
+        rvPostHome = findViewById(R.id.rv_home_posts);
+        rvPostHome.setLayoutManager(new LinearLayoutManager(HomeActivity.this, LinearLayoutManager.VERTICAL, false));
+
+        postHomeAdapter = new PostHomeAdapter(posts);
+        rvPostHome.setAdapter(postHomeAdapter);
+
         this.initFirebase();
-
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        posts = new ArrayList<>();
-    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        posts = new ArrayList<>();
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        posts = new ArrayList<>();
+//    }
 
     private void initFirebase(){
 
@@ -91,7 +103,9 @@ public class HomeActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                posts = new ArrayList<>();
+                if (posts.size() > 0) {
+                    posts.clear();
+                }
                 for(DataSnapshot ds: snapshot.getChildren()){
 //                    posts.add(ds.child("user").getValue(Post.class));
 
@@ -115,12 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                 posts.sort(compareById);
                 java.util.Collections.reverse(posts);
 
-                rvPostHome = findViewById(R.id.rv_home_posts);
-                rvPostHome.setLayoutManager(new LinearLayoutManager(HomeActivity.this, LinearLayoutManager.VERTICAL, false));
-
-
-                postHomeAdapter = new PostHomeAdapter(posts);
-                rvPostHome.setAdapter(postHomeAdapter);
+                postHomeAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -139,6 +148,7 @@ public class HomeActivity extends AppCompatActivity {
         this.ibHome.setOnClickListener(view->{
             Intent i = new Intent(HomeActivity.this, HomeActivity.class);
             startActivity(i);
+            finish();
         });
 
         this.ibAdd.setOnClickListener(view->{

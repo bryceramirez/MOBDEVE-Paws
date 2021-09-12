@@ -280,14 +280,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 break;
 
             case R.id.btn_post_details:
-
-
                 setImage();
-//
-//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//                mPhotoEditorView.getSource().getDrawable().compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-//                String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-//                return Uri.parse(path);
                 break;
         }
     }
@@ -356,12 +349,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                     mPhotoEditor.saveAsFile(filePath, saveSettings, new PhotoEditor.OnSaveListener() {
                         @Override
                         public void onSuccess(@NonNull String imagePath) {
-//                            mSaveFileHelper.notifyThatFileIsNowPubliclyAvailable(getContentResolver());
-//                            hideLoading();
-//                            showSnackbar("Image Saved Successfully");
                             mSaveImageUri = uri;
-//                            mPhotoEditorView.getSource().setImageURI(mSaveImageUri);
-//                            mPhotoEditor.setFilterEffect(PhotoFilter.NONE);
                             Intent i = new Intent(EditImageActivity.this, PostDetailsEditedActivity.class);
                             i.putExtra("URI", uri.toString());
                             i.putExtra("FILEPATH", filePath);

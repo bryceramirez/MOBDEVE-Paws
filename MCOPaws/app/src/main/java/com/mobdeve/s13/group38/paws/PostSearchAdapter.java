@@ -78,7 +78,7 @@ public class PostSearchAdapter extends RecyclerView.Adapter<PostSearchViewHolder
                         i.putExtra("USER", currentPost.getUser());
                         i.putExtra("DESCRIPTION", currentPost.getDescription());
                         i.putExtra("COMMENTS", currentPost.getComments());
-                        i.putExtra("LIKES", currentPost.getLikes().size()-1+"");
+                        i.putExtra("LIKES", currentPost.getLikes().size()+"");
                         i.putExtra("TIME", date);
                         i.putExtra("PHOTO", currentPost.getPhoto());
                         i.putExtra("PROFILEPIC", profilepic);
@@ -103,8 +103,6 @@ public class PostSearchAdapter extends RecyclerView.Adapter<PostSearchViewHolder
     }
 
     private void initFirebase(){
-
-//        this.storageReference = storage.getReference();
         this.mAuth = FirebaseAuth.getInstance();
         this.database = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/");
         this.databaseReference = database.getReference(Collections.posts.name());
