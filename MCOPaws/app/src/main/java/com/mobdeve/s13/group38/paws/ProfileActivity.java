@@ -44,6 +44,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -172,11 +173,12 @@ public class ProfileActivity extends AppCompatActivity {
                 String profilepic = snapshot.child("profilepic").getValue().toString();
 
                 try {
+
                     Date birthdayConv = new SimpleDateFormat("MM/dd/yyyy", Locale.US).parse(birthday);
                     Calendar c = Calendar.getInstance();
                     c.setTime(birthdayConv);
                     int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
+                    int month = c.get(Calendar.MONTH) + 1;
                     int date = c.get(Calendar.DATE);
                     LocalDate l1 = LocalDate.of(year, month, date);
                     LocalDate now1 = LocalDate.now();

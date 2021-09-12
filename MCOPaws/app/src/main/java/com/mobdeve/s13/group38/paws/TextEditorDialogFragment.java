@@ -82,7 +82,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         mAddTextEditText = view.findViewById(R.id.tv_add_text_edit_text);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        mAddTextDoneTextView = view.findViewById(R.id.tv_add_text_done_text);
+        mAddTextDoneTextView = view.findViewById(R.id.btn_add_text_done_text);
 
         //Setup the color picker for text color
         RecyclerView addTextColorPickerRecyclerView = view.findViewById(R.id.rv_add_text_color_picker_text);

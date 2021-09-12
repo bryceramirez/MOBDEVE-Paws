@@ -1,10 +1,12 @@
 package com.mobdeve.s13.group38.paws;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -23,8 +25,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar pbLogin;
 
     private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
     private GoogleSignInOptions gso;
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 444;
@@ -92,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
     }
     private void signInGoogle() {
@@ -122,6 +139,80 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        this.pbLogin.setVisibility(View.VISIBLE);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            mAuth = FirebaseAuth.getInstance();
+                            database = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/");
+
+                            database.getReference().child(Collections.users.name()).addValueEventListener(new ValueEventListener() {
+                                @RequiresApi(api = Build.VERSION_CODES.O)
+                                @Override
+                                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                    Boolean firstTime = true;
+                                    for(DataSnapshot ds: snapshot.getChildren()){
+                                        if(ds.child("email").getValue().toString().equals(user.getEmail())) {
+                                            firstTime = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if(firstTime) {
+                                        Date datenow = new Date();
+
+                                        String date = datenow.getMonth()+1 + "/" + datenow.getDate() + "/" + datenow.getYear();
+
+                                        User user_input = new User(user.getEmail(), "", "Male", "", "", date, "", "none");
+
+                                        database.getReference(Collections.users.name())
+                                                .child(mAuth.getCurrentUser().getUid())
+                                                .setValue(user_input).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    MainActivity.this.pbLogin.setVisibility(View.GONE);
+//                                        Toast.makeText(MainActivity.this, "User Registration Registered", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                    pbLogin.setVisibility(View.VISIBLE);
+                                                } else {
+                                                    MainActivity.this.pbLogin.setVisibility(View.GONE);
+                                                    Toast.makeText(MainActivity.this, "User Registration Failed", Toast.LENGTH_SHORT).show();
+                                                    pbLogin.setVisibility(View.VISIBLE);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        pbLogin.setVisibility(View.VISIBLE);
+                                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                }
+                            });
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+
+                        }
+                    }
+                });
     }
 
     private void signIn(String email, String password){

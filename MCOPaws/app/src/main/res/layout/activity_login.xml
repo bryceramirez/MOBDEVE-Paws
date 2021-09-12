@@ -107,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
-        android:text="or Signup via"
+        android:text="or sign in via"
         android:textColorHighlight="#424141"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/btn_login"
