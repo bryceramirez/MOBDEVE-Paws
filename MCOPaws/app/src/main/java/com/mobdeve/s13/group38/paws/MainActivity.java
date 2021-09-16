@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                                     if(firstTime) {
                                         Date datenow = new Date();
 
-                                        String date = datenow.getMonth()+1 + "/" + datenow.getDate() + "/" + datenow.getYear();
+                                        String date = datenow.getMonth()+1 + "/" + datenow.getDate() + "/" + 2018;
 
                                         User user_input = new User(user.getEmail(), "", "Male", "", "", date, "", "none");
 

@@ -83,6 +83,8 @@ public class RegisterActivity extends AppCompatActivity {
         this.btnRegister = findViewById(R.id.btn_register);
         this.pbRegister = findViewById(R.id.pb_register);
 
+        this.etGender.setText("Male");
+
         this.tvLogin.setOnClickListener(view->{
             Intent i = new Intent(RegisterActivity.this, MainActivity.class);
             startActivity(i);

@@ -135,7 +135,6 @@ public class PostDetailsEditedActivity extends AppCompatActivity{
                         description = etDescription.getText().toString().trim();
 
                         ArrayList<String> filler = new ArrayList<>();
-                        filler.add("none");
                         post = new Post(mAuth.getCurrentUser().getUid(), randomKey, filler, filler, new Date().toString(), description);
 
                         databaseReference

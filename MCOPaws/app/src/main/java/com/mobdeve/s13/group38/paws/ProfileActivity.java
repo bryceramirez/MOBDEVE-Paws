@@ -158,6 +158,7 @@ public class ProfileActivity extends AppCompatActivity {
             this.userId = getIntent().getStringExtra("USER");
             this.ibEdit.setVisibility(View.GONE);
             this.ibLogout.setVisibility(View.GONE);
+            this.ibProfileChange.setVisibility(View.GONE);
         }
         DatabaseReference reference = FirebaseDatabase.getInstance("https://mobdeve-paws-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
 

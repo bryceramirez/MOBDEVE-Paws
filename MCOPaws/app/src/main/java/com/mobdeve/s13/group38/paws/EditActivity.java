@@ -81,14 +81,13 @@ public class EditActivity extends AppCompatActivity {
                 if(!checkEmpty(email, password, gender, name, breed, birthday)){
                     User user = new User(email, password, gender, name, breed, birthday, description, profilepic);
                     storeUser(user);
+                    Intent i = new Intent(EditActivity.this, ProfileActivity.class);
+                    startActivity(i);
+                    finish();
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-            Intent i = new Intent(EditActivity.this, ProfileActivity.class);
-            startActivity(i);
-            finish();
         });
 
 
